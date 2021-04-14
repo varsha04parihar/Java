@@ -15,7 +15,7 @@ class Account
         if(actBal<wbal)
         {
             InsufficienBalanceException ec=new
-                    InsufficienBalanceException();
+                    InsufficienBalanceException("You cannot withdraw...since you don't have enough bal");
             throw ec;
             //throw new InsufficientBalanceException();
         }
