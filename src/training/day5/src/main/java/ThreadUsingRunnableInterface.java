@@ -1,5 +1,3 @@
-import jdk.nashorn.internal.runtime.ECMAException;
-
 class SecondThread implements Runnable
 {
     public void run()
