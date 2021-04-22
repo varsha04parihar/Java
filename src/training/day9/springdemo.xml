@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:p="http://www.springframework.org/schema/p"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+       
+        
+        <bean class="com.spring.demo.SpringIOCDemo.Student" name="Stud1">
+       <property name="id" value="123"></property>
+        <property name="name" value="varsha"></property>
+        </bean>
+        
+        <!-- other way -->
+        <!-- 
+         <bean class="com.spring.demo.SpringIOCDemo.Student" name="Stud1">
+       <property name="id">
+       <value>111</value>
+       </property>
+       
+        <property name="name">
+        <value>Vikram</value>
+        </property>
+        </bean>
+        -->
+        
+        
+        <!-- other way -->
+        <!-- 
+         <bean class="com.spring.demo.SpringIOCDemo.Student" name="Stud1" p:id="1111" p:name="Serenity">
+		-->
+		
+		
+		<!-- Test Class -->
+		<bean class="com.spring.demo.SpringIOCDemo.Demo" name="demo1">
+    	<property name="id" value="100"></property>
+    	<property name="name" value="some name"></property>
+    	<property name="list">
+    			<list>
+    				<value>list item 1</value>
+    				<value>list item 2</value>
+    				<value>list item 3</value>
+    			</list>
+    	</property>
+    	<property name="set">
+    		<set>
+    			<value>set item 1</value>
+   				<value>set item 2</value>
+   				<value>set item 3</value>
+    		</set>
+    	</property>
+    	
+    	<property name="map">
+    		<map>
+    			<entry key="key1" value="value1"></entry>
+    			<entry key="key2" value="value2"></entry>
+    			<entry key="key3" value="value3"></entry>
+    		</map>
+    	</property>
+    	</bean>
+    
+   		 <!-- Employee Class -->
+   		 <bean class="com.spring.demo.SpringIOCDemo.Date" name="date1">
+    	<property name="day" value="04" />
+    	<property name="month" value="March" />
+    	<property name="year" value="1998" />
+    	</bean>
+    
+    	<bean class="com.spring.demo.SpringIOCDemo.Employee" name="employee1">
+    	<property name="id" value="211" />
+    	<property name="name" value="Jayson" />
+    	<property name="email" value="jay@gmail.com" />
+    	<property name="date">
+    		<ref bean="date1" />
+    	</property>
+    	</bean>
+  
+		<bean class="com.spring.demo.SpringIOCDemo.Customer" name="customer1">
+		<constructor-arg value="222"/>
+		<constructor-arg value="Customer1"/>
+		<constructor-arg ref="date1"/>
+		</bean>
+		
+		<bean class="com.spring.demo.SpringIOCDemo.Demo2" name="demo22">
+		<constructor-arg value="001"/>
+		<constructor-arg value="XYZ"/>
+		<constructor-arg value="abc@gmail.com"/>
+		</bean>
+		
+		 
+	    <bean class="com.spring.demo.SpringIOCDemo.Calculator" name="calculator1">
+	    <constructor-arg value="10" type="int" index="1" />
+	    <constructor-arg value="20" type="int" index="0"/>
+	    </bean>
+	    
+	    
+	    <bean class="com.spring.demo.SpringIOCDemo.Calculator" name="calculator2">
+	    <constructor-arg value="20.45" type="double" index="0" />
+	    <constructor-arg value="20.345" type="double" index="1"/>
+	    </bean>
+	    
+	    
+	    <bean class="com.spring.demo.SpringIOCDemo.LifeCycle" name="life1" 
+  		 init-method="init" destroy-method="destroy">
+	   	<property name="id" value="1111" />
+	   	<property name="name" value="Serinity" />
+	   	<property name="email" value="ser@gmail.com" />
+   		</bean>
+    
+    
+       <bean class="com.spring.demo.SpringIOCDemo.BeanLife" name="life2" >
+	   	<property name="id" value="1" />
+	   	<property name="name" value="john" />
+	   	<property name="email" value="j@gmail.com" />
+ 	   </bean>
+    
+	    
+        </beans>
