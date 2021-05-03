@@ -1,0 +1,543 @@
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+//create a db...go inside ur db
+> use mydb
+switched to db mydb
+
+//wont show ur db
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+//will create a collection employee in ur db
+> db.employee.insert({"name":"jimin"})
+WriteResult({ "nInserted" : 1 })
+
+
+> show collections
+employee
+
+//will show ur db
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+mydb    0.000GB
+
+//insert into collection
+> db.employee.insert({"name":"jimin","dob":"06-05-1991"})
+WriteResult({ "nInserted" : 1 })
+> db.employee.insert({"name":"jimin","email":"jim@gmail.com"})
+WriteResult({ "nInserted" : 1 })
+> db.employee.insert({"name":"jimin","phone":1234567890})
+WriteResult({ "nInserted" : 1 })
+> db.employee.insert({"name":"jimin","phone":1234567890})
+WriteResult({ "nInserted" : 1 })
+
+//show documents
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+
+//its like primary key and use to create customized id
+> db.employee.insert({"_id":111,"name":"Jayson"})
+WriteResult({ "nInserted" : 1 })
+
+//duplicates not allowed
+> db.employee.insert({"_id":111,"name":"Jayson"})
+WriteResult({
+        "nInserted" : 0,
+        "writeError" : {
+                "code" : 11000,
+                "errmsg" : "E11000 duplicate key error collection: mydb.employee index: _id_ dup key: { _id: 111.0 }"
+        }
+})
+
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+
+//can also have char as primary key
+> db.employee.insert({"_id":"XYZ","name":"Lisa"})
+WriteResult({ "nInserted" : 1 })
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Lisa" }
+
+//if u make spelling mistakes for collection name a new collection will be created of that name
+
+//insert multiple data at a time using array
+> db.employee.insert([{"_id":"1","name":"Lisa"},{"name":"Morgan","age":24}])
+BulkWriteResult({
+        "writeErrors" : [ ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 2,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+})
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Lisa" }
+{ "_id" : "1", "name" : "Lisa" }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+
+//save is used to update the document or if the data is not found for update it will insert the data into the collection
+//lisa->jennie----------updated
+> db.employee.save({"_id":"XYZ","name":"Jennie"})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa" }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+
+
+//find by constraint
+> db.employee.find({name:"jimin"})
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+
+//count the no of records
+> db.employee.find({name:"jimin"}).count()
+5
+> db.employee.find().count()
+9
+
+//where conditions
+> db.employee.find({name:{$in:["Morgan","Lisa"]}})
+{ "_id" : "1", "name" : "Lisa" }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+
+> db.employee.find({name:{$in:["Morgan","Lisa"]}}).count()
+2
+
+//and operation
+> db.employee.find({$and:[{"name":"Lisa"},{"age":24}]})
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 24 }
+
+> db.employee.find({_id:"XYZ",name:"Jennie"})
+{ "_id" : "XYZ", "name" : "Jennie" }
+> db.employee.find({_id:"XYZ",name:"Jennie"}).count()
+
+//or operation
+> db.employee.find({$or:[{name:"jimin"},{phone:"1234567890"}]})
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+> db.employee.find({$or:[{name:"jimin"},{phone:"1234567890"}]}).count()
+5
+
+//other way to insert mutiple records
+> db.employee.insertMany([{"name":"Lisa","age":24},{"name":"Morgan","age":24}])
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("608f93a460199edb2ed79577"),
+                ObjectId("608f93a460199edb2ed79578")
+        ]
+}
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa" }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+
+//other way to insert single record
+> db.employee.insertOne({"name":"Lisa","age":24})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("608f93f360199edb2ed79579")
+}
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa" }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 24 }
+
+//display in formatted way
+> db.employee.find().pretty()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{
+        "_id" : ObjectId("608f88b860199edb2ed79572"),
+        "name" : "jimin",
+        "dob" : "06-05-1991"
+}
+{
+        "_id" : ObjectId("608f88dc60199edb2ed79573"),
+        "name" : "jimin",
+        "email" : "jim@gmail.com"
+}
+{
+        "_id" : ObjectId("608f88ff60199edb2ed79574"),
+        "name" : "jimin",
+        "phone" : 1234567890
+}
+{
+        "_id" : ObjectId("608f890360199edb2ed79575"),
+        "name" : "jimin",
+        "phone" : 1234567890
+}
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa" }
+{
+        "_id" : ObjectId("608f8e7f60199edb2ed79576"),
+        "name" : "Morgan",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("608f93a460199edb2ed79577"),
+        "name" : "Lisa",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("608f93a460199edb2ed79578"),
+        "name" : "Morgan",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("608f93f360199edb2ed79579"),
+        "name" : "Lisa",
+        "age" : 24
+}
+
+//will return first matching record
+> db.employee.findOne({$and:[{"name":"Lisa"},{"age":24}]})
+{
+        "_id" : ObjectId("608f93a460199edb2ed79577"),
+        "name" : "Lisa",
+        "age" : 24
+}
+
+//update one document
+> db.employee.updateOne({name:"Lisa"},{ $set: {"age":30}})
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 24 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 24 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 24 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 24 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa" }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa" }
+
+//update all the documents
+> db.employee.updateMany({name:"Lisa"},{ $set: {"age":30}})
+{ "acknowledged" : true, "matchedCount" : 8, "modifiedCount" : 7 }
+
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa", "age" : 30 }
+
+//will delete the first document found
+> db.employee.deleteOne({"name":"aaa","age":24})
+{ "acknowledged" : true, "deletedCount" : 1 }
+
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa366dc20d804e0209ef9"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa367dc20d804e0209efa"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa369dc20d804e0209efb"), "name" : "aaa", "age" : 24 }
+
+//will delete all the documents
+> db.employee.deleteMany({"name":"aaa","age":24})
+{ "acknowledged" : true, "deletedCount" : 3 }
+
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa", "age" : 30 }
+
+//show documents
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa4fddc20d804e0209efc"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa4fedc20d804e0209efd"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa4ffdc20d804e0209efe"), "name" : "aaa", "age" : 24 }
+
+//replace first document context with other context
+> db.employee.replaceOne({"name":"aaa"},{"name":"aaa1","age":24})
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa4fddc20d804e0209efc"), "name" : "aaa1", "age" : 24 }
+{ "_id" : ObjectId("608fa4fedc20d804e0209efd"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa4ffdc20d804e0209efe"), "name" : "aaa", "age" : 24 }
+
+//return documents where doc field is greater than the specified value
+> db.employee.find({age:{$gt:24}})
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa", "age" : 30 }
+
+> db.employee.find({age:{$gt:24}}).count()
+8
+
+
+//return documents where doc field is greater than equal to the specified value
+> db.employee.find({age:{$gte:24}})
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa4fddc20d804e0209efc"), "name" : "aaa1", "age" : 24 }
+{ "_id" : ObjectId("608fa4fedc20d804e0209efd"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa4ffdc20d804e0209efe"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa500dc20d804e0209eff"), "name" : "aaa", "age" : 24 }
+
+> db.employee.find({age:{$gte:24}}).count()
+14
+
+//return documents where doc field is less than the specified value
+> db.employee.find({age:{$lt:30}})
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608fa4fddc20d804e0209efc"), "name" : "aaa1", "age" : 24 }
+{ "_id" : ObjectId("608fa4fedc20d804e0209efd"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa4ffdc20d804e0209efe"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa500dc20d804e0209eff"), "name" : "aaa", "age" : 24 }
+
+> db.employee.find({age:{$lt:30}}).count()
+6
+
+//return documents where doc field is less than equal to the specified value
+> db.employee.find({age:{$lte:30}})
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa4fddc20d804e0209efc"), "name" : "aaa1", "age" : 24 }
+{ "_id" : ObjectId("608fa4fedc20d804e0209efd"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa4ffdc20d804e0209efe"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa500dc20d804e0209eff"), "name" : "aaa", "age" : 24 }
+> db.employee.find({age:{$lte:30}}).count()
+14
+
+//add documents
+
+> db.employee.insertMany([{"name":"Lisa","age":28},{"name":"Morgan","age":20}])
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("608fa766dc20d804e0209f00"),
+                ObjectId("608fa766dc20d804e0209f01")
+        ]
+}
+> db.employee.find()
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa4fddc20d804e0209efc"), "name" : "aaa1", "age" : 24 }
+{ "_id" : ObjectId("608fa4fedc20d804e0209efd"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa4ffdc20d804e0209efe"), "name" : "aaa", "age" : 24 }
+Type "it" for more
+> it
+{ "_id" : ObjectId("608fa500dc20d804e0209eff"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa766dc20d804e0209f00"), "name" : "Lisa", "age" : 28 }
+{ "_id" : ObjectId("608fa766dc20d804e0209f01"), "name" : "Morgan", "age" : 20 }
+
+
+//return documents where doc field is equal to the specified value
+> db.employee.find({age:{$eq:20}})
+{ "_id" : ObjectId("608fa766dc20d804e0209f01"), "name" : "Morgan", "age" : 20 }
+> db.employee.find({age:{$eq:20}}).count()
+1
+
+//return documents where doc field is not equal to the specified value
+
+> db.employee.find({age:{$ne:20}})
+{ "_id" : ObjectId("608f884d60199edb2ed79571"), "name" : "jimin" }
+{ "_id" : ObjectId("608f88b860199edb2ed79572"), "name" : "jimin", "dob" : "06-05-1991" }
+{ "_id" : ObjectId("608f88dc60199edb2ed79573"), "name" : "jimin", "email" : "jim@gmail.com" }
+{ "_id" : ObjectId("608f88ff60199edb2ed79574"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : ObjectId("608f890360199edb2ed79575"), "name" : "jimin", "phone" : 1234567890 }
+{ "_id" : 111, "name" : "Jayson" }
+{ "_id" : "XYZ", "name" : "Jennie" }
+{ "_id" : "1", "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f8e7f60199edb2ed79576"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93a460199edb2ed79577"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f93a460199edb2ed79578"), "name" : "Morgan", "age" : 24 }
+{ "_id" : ObjectId("608f93f360199edb2ed79579"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eacdc20d804e0209ef3"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb0dc20d804e0209ef4"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608f9eb2dc20d804e0209ef5"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa217dc20d804e0209ef6"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa242dc20d804e0209ef7"), "name" : "Lisa", "age" : 30 }
+{ "_id" : ObjectId("608fa4fddc20d804e0209efc"), "name" : "aaa1", "age" : 24 }
+{ "_id" : ObjectId("608fa4fedc20d804e0209efd"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa4ffdc20d804e0209efe"), "name" : "aaa", "age" : 24 }
+Type "it" for more
+> it
+{ "_id" : ObjectId("608fa500dc20d804e0209eff"), "name" : "aaa", "age" : 24 }
+{ "_id" : ObjectId("608fa766dc20d804e0209f00"), "name" : "Lisa", "age" : 28 }
+> db.employee.find({age:{$ne:20}}).count()
+22
