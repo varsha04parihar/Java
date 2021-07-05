@@ -1,0 +1,23 @@
+{
+	"name": "DestinationDataset_m0n",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageDemoLink",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "emp",
+				"container": "demonewblob"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,9 @@
+{
+	"name": "varshademodf",
+	"location": "centralus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "60534808-c4d5-49db-87c1-a2affc2f303d",
+		"tenantId": "65bc0b3b-7ca2-488c-ba9c-b1bebdd49af6"
+	}
+}
